@@ -63,8 +63,7 @@ public:
     int createPieces(const ALLY & A, const int& col, const int& row, const char*);
     void moveCharacterTo(const int& handle, const int& col, const int& row);
     void moveSelection();
-    int getHandle(int & col, int & row, const bool& not_empty = false);
-    void /*std::vector<int> &&*/ getTiles();
+    void /*std::vector<int> &&*/ select();
 };
 
 #endif // VIEW2D_H

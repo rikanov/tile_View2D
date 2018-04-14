@@ -42,18 +42,10 @@ void loop(View2D * T)
 {
     while(true)
     {
-        T->getTiles();
+        T->select();
         T->moveSelection();
         T->selected.clear();
         continue;
-        int col=0, row=0;
-        int pick_handle = T->getHandle(col, row, true);
-        SDL_Delay(120);
-        int put_handle=T->getHandle(col,row);
-        if(put_handle == 0)
-        {
-            T->moveCharacterTo(pick_handle,col,row);
-        }
     }
 }
 

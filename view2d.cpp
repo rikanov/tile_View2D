@@ -93,13 +93,14 @@ void View2D::loadTextureImage()
 
 void View2D::moveCharacterTo(const int& handle, const int& col, const int& row)
 {
+    const int taken_handle = handles[col][row];
     if(handle)
     {
         const int x = tile_pieces[handle-1]->getCol();
         const int y = tile_pieces[handle-1]->getRow();
-        if(handles[col][row])
+        if(taken_handle)
         {
-            tile_pieces.at(handles[col][row]-1)->active = false;
+            tile_pieces.at(taken_handle-1)->active = false;
         }
         handles[x][y] = 0;
         handles[col][row] = handle;
@@ -107,13 +108,20 @@ void View2D::moveCharacterTo(const int& handle, const int& col, const int& row)
     }
     else
     {
-        tile_pieces.at(handles[col][row]-1)->active = false;
-        handles[col][row] = 0;
+        if(taken_handle)
+        {
+            tile_pieces.at(taken_handle-1)->active = false;
+            handles[col][row] = 0;
+        }
     }
 }
 
 void View2D::moveSelection()
 {
+    if(selected.empty())
+    {
+        return;
+    }
     for(std::vector<SDL_Point>::reverse_iterator rit = selected.rbegin(); rit+1 != selected.rend(); ++rit)
     {
         const int dest_x = rit->x;
@@ -125,53 +133,7 @@ void View2D::moveSelection()
     }
 }
 
-void View2D::redrawBoard()
-{
-    for(CursorTile * c : tile_pieces)
-    {
-        if(c->active)
-        {
-            PlayerTile * t = dynamic_cast<PlayerTile* >(c);
-            SDL_RenderCopy(render,t->backgrnd,NULL,&(t->pos));
-            SDL_RenderCopy(render,t->mark,NULL,&(t->pos));
-        }
-        //SDL_RenderCopyEx(render,t->mark,NULL,&(t->pos),t->angle, &(t->middle), t->flip);
-    }
-}
-
-int View2D::getHandle(int& col, int& row, const bool& not_empty)
-{    
-    SDL_Event event;
-    int mouse_x, mouse_y, result = -1;
-    show();   
-    while(result < not_empty)
-    {  
-        SDL_PollEvent(&event);
-        if(event.type == SDL_QUIT)
-        {
-            exit(0);
-        }
-        if(event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP)
-        {
-            const bool click = SDL_GetMouseState(&mouse_x,&mouse_y) & SDL_BUTTON(SDL_BUTTON_LEFT);
-            if(convertToTilePosition(mouse_x,mouse_y)==false)
-            {
-                continue;
-            }
-            if(col != mouse_x || row != mouse_y)
-            {               
-                col = mouse_x;
-                row = mouse_y;
-                moveTileCursorTo(col,row);
-                show();
-            }
-            result = click ? handles[col][row] : -1;
-        } 
-    }
-    return result;
-}
-
-void View2D::getTiles()
+void View2D::select()
 {
     std::vector<int> result;
     SDL_Event event;
@@ -181,26 +143,37 @@ void View2D::getTiles()
     do
     {
         SDL_WaitEvent(&event);
+        if(event.type == SDL_QUIT)
+        {
+            exit(0);
+        }
         SDL_GetMouseState(&mouse.x,&mouse.y);
-        if(convertToTilePosition(mouse.x,mouse.y) && (mouse.x != mouse_act.x || mouse.y != mouse_act.y))
+        if(convertToTilePosition(mouse.x,mouse.y) == false)
+        {
+            continue;
+        }
+        if(mouse.x != mouse_act.x || mouse.y != mouse_act.y)
         {
             mouse_act = mouse;
             moveTileCursorTo(mouse_act.x, mouse_act.y);
             show();
         }
-        if(event.type == SDL_QUIT)
-        {
-            exit(0);
-        }
-        
     }while(event.type != SDL_MOUSEBUTTONDOWN);
     do
     {
         std::vector<SDL_Point>::reverse_iterator rit = selected.rbegin();
         SDL_PollEvent(&event);
-        if((SDL_GetMouseState(&mouse.x, &mouse.y) & SDL_BUTTON(SDL_BUTTON_LEFT)) /*&& event.type == SDL_MOUSEMOTION */&& convertToTilePosition(mouse.x,mouse.y))
+        if(event.type == SDL_QUIT)
         {
-            
+            exit(0);
+        }
+        if(SDL_GetMouseState(&mouse.x, &mouse.y) & SDL_BUTTON(SDL_BUTTON_LEFT))
+        {
+            if(convertToTilePosition(mouse.x,mouse.y) == false)
+            {
+                selected.clear();
+                continue;
+            }
             if(mouse.x != mouse_act.x || mouse.y != mouse_act.y)
             {
                 mouse_act = mouse;
@@ -259,6 +232,20 @@ void View2D::showSelected()
     {
         moveTileCursorTo(s.x,s.y);
         showTileCursor();
+    }
+}
+
+void View2D::redrawBoard()
+{
+    for(CursorTile * c : tile_pieces)
+    {
+        if(c->active)
+        {
+            PlayerTile * t = dynamic_cast<PlayerTile* >(c);
+            SDL_RenderCopy(render,t->backgrnd,NULL,&(t->pos));
+            SDL_RenderCopy(render,t->mark,NULL,&(t->pos));
+        }
+        //SDL_RenderCopyEx(render,t->mark,NULL,&(t->pos),t->angle, &(t->middle), t->flip);
     }
 }
 

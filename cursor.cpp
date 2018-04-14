@@ -89,13 +89,10 @@ bool CursorTile::convertToTilePosition(int& x, int& y)
             x -= (mod_y < step_y - mod_x * step_y / step_x);
         }
         
-        success = (y < 4) ? (2 * y + 9 > x) && (x >= 0) : (15 - 2 * (y-4) > x) && (x >= 0); 
-        
-        if(y < 0 || y > 7)
-        {
-            success = false;
-        }
-        
+        success = (y < 4) ? (2 * y + 9 > x) : (15 - 2 * (y-4) > x) ; 
+        success &= (x >= 0);
+        success &= (y >= 0);
+        success &= (y < 8);        
     }
     return success;
 }
