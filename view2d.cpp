@@ -63,7 +63,7 @@ void View2D::createWindow()
     cursor = new CursorTile(render); 
 }
 
-int View2D::createPieces(const ALLY & A, const int& col, const int& row, const char* png)
+int View2D::createPieces(const Ally & A, const int& col, const int& row, const char* png)
 {
     tile_pieces.push_back(new PlayerTile(A, png, col, row,render));
     const int handle = tile_pieces.size();
@@ -131,89 +131,6 @@ void View2D::moveSelection()
         SDL_Delay(100);
         show();
     }
-}
-
-void View2D::select()
-{
-    std::vector<int> result;
-    SDL_Event event;
-    SDL_Point mouse;
-    SDL_Point mouse_act;
-    show();
-    do
-    {
-        SDL_WaitEvent(&event);
-        if(event.type == SDL_QUIT)
-        {
-            exit(0);
-        }
-        SDL_GetMouseState(&mouse.x,&mouse.y);
-        if(convertToTilePosition(mouse.x,mouse.y) == false)
-        {
-            continue;
-        }
-        if(mouse.x != mouse_act.x || mouse.y != mouse_act.y)
-        {
-            mouse_act = mouse;
-            moveTileCursorTo(mouse_act.x, mouse_act.y);
-            show();
-        }
-    }while(event.type != SDL_MOUSEBUTTONDOWN);
-    do
-    {
-        std::vector<SDL_Point>::reverse_iterator rit = selected.rbegin();
-        SDL_PollEvent(&event);
-        if(event.type == SDL_QUIT)
-        {
-            exit(0);
-        }
-        if(SDL_GetMouseState(&mouse.x, &mouse.y) & SDL_BUTTON(SDL_BUTTON_LEFT))
-        {
-            if(convertToTilePosition(mouse.x,mouse.y) == false)
-            {
-                selected.clear();
-                continue;
-            }
-            if(mouse.x != mouse_act.x || mouse.y != mouse_act.y)
-            {
-                mouse_act = mouse;
-                moveTileCursorTo(mouse_act.x, mouse_act.y);
-                show();
-            }
-           // std::cout<<"exec"<<std::endl;
-            switch(selected.size())
-            {
-                case 0:
-                    selected.push_back(mouse);
-                    break;
-                case 1:
-                    if(rit->x != mouse.x || rit->y != mouse.y)
-                    {
-                        selected.push_back(mouse);
-                    }
-                    break;
-                default:
-                    if(rit->x != mouse.x || rit->y != mouse.y)
-                    {
-                        ++rit;
-                        if(rit->x == mouse.x && rit->y == mouse.y)
-                        {
-                            selected.pop_back();
-                        }
-                        else
-                        {
-                            selected.push_back(mouse);
-                        }
-                    }
-            }
-            show();
-        }
-        if(selected.size() > 4)
-        {
-            selected.clear();
-        }
-    }while(event.type != SDL_MOUSEBUTTONUP);
-   // return std::move(result);
 }
 
 void View2D::moveTileCursorTo(const int& row, const int& col)
