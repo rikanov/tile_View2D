@@ -31,7 +31,7 @@ class PlayerTile: public CursorTile
     void alignToPosition(const int& col, const int& row) override;
 public:
     SDL_Texture * mark;
-    PlayerTile(const ALLY & A, const std::string& tile_name, const int& col, const int& row, SDL_Renderer* render);
+    PlayerTile(const Ally & A, const std::string& tile_name, const int& col, const int& row, SDL_Renderer* render);
     virtual ~PlayerTile();
 };
 

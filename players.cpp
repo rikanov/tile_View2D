@@ -19,16 +19,17 @@
  */
 
 #include "players.h"
+#include "../Engine/enums.h"
 #include <string.h>
 
-PlayerTile::PlayerTile(const ALLY & A, const std::string& tile_name, const int& c, const int& r, SDL_Renderer * render) 
+PlayerTile::PlayerTile(const Ally & A, const std::string& tile_name, const int& c, const int& r, SDL_Renderer * render) 
 {
     std::string ally;
-    if(A == FOE)
+    if(A == Ally::FOE)
     {
         ally = "foe";
     }
-    else if (A == OWN)
+    else if (A == Ally::OWN)
     {
         ally = "own";
     }
@@ -38,7 +39,7 @@ PlayerTile::PlayerTile(const ALLY & A, const std::string& tile_name, const int& 
     }
     const std::string bgrnd1 = "tiles/tile_backgrounds/"+ally+"_up.png";
     const std::string bgrnd2 = "tiles/tile_backgrounds/"+ally+"_down.png";
-    const std::string ico_base("tiles/marks/"+tile_name+"/"+std::string(A==OWN ? "own_" : "foe_"));
+    const std::string ico_base("tiles/marks/"+tile_name+"/"+std::string(A == Ally::OWN ? "own_" : "foe_"));
   
     background[0] = IMG_LoadTexture(render, bgrnd1.c_str());
     background[1] = IMG_LoadTexture(render, bgrnd2.c_str());

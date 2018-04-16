@@ -22,7 +22,7 @@
 #define CURSOR_H
 
 
-#include "constants.h"
+#include "../Engine/enums.h"
 #include "sdl_dep.h"
 
 class CursorTile
