@@ -38,6 +38,10 @@ class View2D
     SDL_Texture * board_background;
     SDL_Rect board_position;
     
+    SDL_Event event;
+    SDL_Point mouse;
+    SDL_Point mouse_act;
+    
     int handles[20][20] = {};
     std::vector<CursorTile*> tile_pieces;
     CursorTile * cursor;
@@ -45,6 +49,8 @@ class View2D
     void createWindow();
     
     void showTileCursor();
+    void selectGroup();
+    void selectJump();
     void showSelected();
     void redrawBoard();
     void loadTextureImage();
@@ -60,7 +66,7 @@ public:
     std::vector<SDL_Point> selected;
     View2D(const char* name,const int w, const int h);
     ~View2D(); 
-    int createPieces(const ALLY & A, const int& col, const int& row, const char*);
+    int createPieces(const Ally & A, const int& col, const int& row, const char*);
     void moveCharacterTo(const int& handle, const int& col, const int& row);
     void moveSelection();
     void /*std::vector<int> &&*/ select();
