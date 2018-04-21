@@ -21,10 +21,11 @@
 #ifndef VIEW2D_H
 #define VIEW2D_H
 
+#include "../BoardView/boardview.h"
 #include "players.h"
 #include <vector>
 
-class View2D
+class View2D: public BoardView
 {
     static bool sdl_initilized;
     static void init();
@@ -37,39 +38,32 @@ class View2D
     SDL_Texture * board_texture = nullptr;
     SDL_Texture * board_background;
     SDL_Rect board_position;
-    
-    SDL_Event event;
-    SDL_Point mouse;
-    SDL_Point mouse_act;
-    
-    int handles[20][20] = {};
+  
     std::vector<CursorTile*> tile_pieces;
     CursorTile * cursor;
 
     void createWindow();
     
-    void showTileCursor();
-    void selectGroup();
-    void selectJump();
-    void showSelected();
-    void redrawBoard();
-    void loadTextureImage();
-    void moveTileCursorTo(const int& row, const int& col);
-    bool convertToTilePosition(int& x, int& y) const
+    virtual void showTileCursor() override;
+   // virtual void selectGroup() override;
+   // virtual void selectJump() override;
+    virtual void showSelected() override;
+    virtual void redrawBoard() override;
+    virtual void moveTileCursorTo(const int& row, const int& col)  override;
+    virtual bool convertToTilePosition(int& x, int& y) const  override
     {
         return CursorTile::convertToTilePosition(x,y);
     }
-    void show();
+    virtual void show()  override;
     
+    void loadTextureImage();
 public:
-    std::vector<SDL_Point> marked;
-    std::vector<SDL_Point> selected;
     View2D(const char* name,const int w, const int h);
     ~View2D(); 
-    int createPieces(const Ally & A, const int& col, const int& row, const char*);
-    void moveCharacterTo(const int& handle, const int& col, const int& row);
-    void moveSelection();
-    void /*std::vector<int> &&*/ select();
+    virtual int createPieces(const Ally & A, const int& col, const int& row, const char*) override;
+    virtual void moveCharacterTo(const int& handle, const int& col, const int& row) override;
+    virtual void moveSelection() override;
+    //void /*std::vector<int> &&*/ select() override;
 };
 
 #endif // VIEW2D_H
