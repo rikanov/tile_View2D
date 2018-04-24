@@ -22,7 +22,7 @@
 #include "../Engine/enums.h"
 #include <string.h>
 
-PlayerTile::PlayerTile(const Ally & A, const std::string& tile_name, const int& c, const int& r, SDL_Renderer * render) 
+PlayerTile::PlayerTile(const Ally & A, const std::string& tile_name, const int& c, const int& r, SDL_Renderer * render)
 {
     std::string ally;
     if(A == Ally::FOE)
@@ -79,7 +79,7 @@ void PlayerTile::alignToPosition(const int& col, const int& row)
     {    
         direction += 3;
     }
-    backgrnd = background[upDown(col,row)];
+    backgrnd = background[ upDown(col,row)];
     mark = phase_mark[direction];
 }
 
@@ -89,5 +89,9 @@ PlayerTile::~PlayerTile()
     for(int i = 0; i < 6 ; ++i)
     {
         SDL_DestroyTexture(phase_mark[i]);
+    }
+    for(int i = 0; i < 4 ; ++i)
+    {
+        SDL_DestroyTexture(background[i]);
     }
 }

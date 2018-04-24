@@ -96,15 +96,16 @@ void View2D::moveCharacterTo(const int& handle, const int& col, const int& row)
     const int taken_handle = handles[col][row];
     if(handle)
     {
-        const int x = tile_pieces[handle-1]->getCol();
-        const int y = tile_pieces[handle-1]->getRow();
+        CursorTile *t = tile_pieces[handle-1];
+        const int x = t->getCol();
+        const int y = t->getRow();
         if(taken_handle)
         {
             tile_pieces.at(taken_handle-1)->active = false;
         }
         handles[x][y] = 0;
         handles[col][row] = handle;
-        tile_pieces[handle-1]->setPos(col,row);
+        t->setPos(col,row);
     }
     else
     {
@@ -128,7 +129,7 @@ void View2D::moveSelection()
         const int dest_y = rit->y;
         const int handle = handles[(rit+1)->x][(rit+1)->y];
         moveCharacterTo(handle, dest_x, dest_y);
-        SDL_Delay(100);
+        SDL_Delay(150);
         show();
     }
 }

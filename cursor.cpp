@@ -44,6 +44,8 @@ CursorTile()
     }
     background[0] = IMG_LoadTexture(render, "tiles/tile_backgrounds/pointer_up.png");
     background[1] = IMG_LoadTexture(render, "tiles/tile_backgrounds/pointer_down.png");
+    background[2] = IMG_LoadTexture(render, "tiles/tile_backgrounds/pointer_up.png");
+    background[3] = IMG_LoadTexture(render, "tiles/tile_backgrounds/pointer_down.png");
     
     if( background[0] == nullptr || background[1] == nullptr)
     {
