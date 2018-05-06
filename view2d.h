@@ -62,7 +62,7 @@ public:
     ~View2D(); 
     virtual int createPieces(const Ally & A, const int& col, const int& row, const char*) override;
     virtual void moveCharacterTo(const int& handle, const int& col, const int& row) override;
-    virtual void moveSelection() override;
+    virtual int moveSelection(const int& revive = 0) override;
     //void /*std::vector<int> &&*/ select() override;
 };
 

@@ -117,12 +117,13 @@ void View2D::moveCharacterTo(const int& handle, const int& col, const int& row)
     }
 }
 
-void View2D::moveSelection()
+int View2D::moveSelection(const int& revive)
 {
     if(selected.empty())
     {
-        return;
+        return 0;
     }
+    const int taken = handles[selected.back().x][selected.back().y];
     for(std::vector<SDL_Point>::reverse_iterator rit = selected.rbegin(); rit+1 != selected.rend(); ++rit)
     {
         const int dest_x = rit->x;
@@ -132,6 +133,13 @@ void View2D::moveSelection()
         SDL_Delay(150);
         show();
     }
+    if(revive)
+    {
+        moveCharacterTo(revive,selected[0].x,selected[0].y);
+        tile_pieces.at(revive-1)->active = true;
+    }
+    selected.clear();
+    return taken;
 }
 
 void View2D::moveTileCursorTo(const int& row, const int& col)
@@ -187,9 +195,9 @@ View2D::~View2D()
         std::cout<<'.';
         delete t;
     }
-    SDL_DestroyTexture(board_background);
-    SDL_DestroyTexture(board_texture);
-    SDL_DestroyRenderer(render);
-    SDL_DestroyWindow(win);
+    SDL_DestroyTexture(board_background); std::cout << win_name <<" board background deleted " << std::endl;
+    SDL_DestroyTexture(board_texture);    std::cout << win_name <<" board texture deleted " << std::endl;
+    SDL_DestroyRenderer(render);          std::cout << win_name <<" render deleted " << std::endl;
+    SDL_DestroyWindow(win);               std::cout << win_name <<" window closed " << std::endl;
     std::cout << std::endl << win_name <<" destructor finished... " << std::endl;
 }

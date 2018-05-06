@@ -85,6 +85,7 @@ void PlayerTile::alignToPosition(const int& col, const int& row)
 
 PlayerTile::~PlayerTile()
 {
+    std::cout << "player tile destructor... " << std::endl;
     SDL_DestroyTexture(mark);
     for(int i = 0; i < 6 ; ++i)
     {
@@ -94,4 +95,5 @@ PlayerTile::~PlayerTile()
     {
         SDL_DestroyTexture(background[i]);
     }
+    std::cout << "finished " << std::endl;
 }
