@@ -192,7 +192,6 @@ View2D::~View2D()
     delete cursor;
     for(CursorTile * t : tile_pieces)
     {
-        std::cout<<'.';
         delete t;
     }
     SDL_DestroyTexture(board_background); std::cout << win_name <<" board background deleted " << std::endl;
