@@ -22,7 +22,7 @@
 #define CURSOR_H
 
 
-#include "../Engine/enums.h"
+#include "../GameEngine/enums.h"
 #include "sdl_dep.h"
 
 class CursorTile

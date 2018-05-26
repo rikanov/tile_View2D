@@ -19,7 +19,7 @@
  */
 
 #include "players.h"
-#include "../Engine/enums.h"
+#include "../GameEngine/enums.h"
 #include <string.h>
 
 PlayerTile::PlayerTile(const Ally & A, const std::string& tile_name, const int& c, const int& r, SDL_Renderer * render)
